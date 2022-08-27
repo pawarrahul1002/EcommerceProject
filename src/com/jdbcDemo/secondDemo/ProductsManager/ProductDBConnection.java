@@ -10,7 +10,7 @@ public class ProductDBConnection {
 	{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			System.out.println("Driver Loaded");
+//			System.out.println("Driver Loaded");
 			
 			//creating the connection
 			String id = "root";

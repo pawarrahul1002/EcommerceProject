@@ -19,60 +19,71 @@ public class Start
 	
 	public static void main(String[] args) throws Exception
 	{
-		boolean isLogged = false;
+//		System.out.println(UserDBController.getUserNum("bzp","12345"));
+		
+//		boolean isLogged = false;
+		int userNum = -1;
 		System.out.println("Welcome to App");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("1 Register \n2 login \n3 exit");
 		switch(Integer.parseInt(br.readLine()))
 		{
 			case 1:							//registration 
-				addDetails();
+				userNum = addDetails();
+
+				if(userNum !=-1)
+				{
+					PurchaseManager.purchaseProduct(userNum);
+				}
+				break;
 				
 			case 2:							//login
 				
-				while(!isLogged)
+				while(userNum == -1)
 				{	
-					isLogged = checkIsLoggedIn();
+					userNum = checkIsLoggedIn();
 					
-					if(isLogged)
+					if(userNum !=-1)
 					{
-						break;
+						PurchaseManager.purchaseProduct(userNum);
 					}
 					else
 					{
 						System.out.println("Wrong UserName or Password");
 	
 						System.out.println("1 Try Again \n2 Register \n3 exit");
-						if(Integer.parseInt(br.readLine())==2)
+						int choice = Integer.parseInt(br.readLine());
+						if(choice==2)
 						{			//registration 
-							addDetails();
-							isLogged = true;
+							userNum = addDetails();
 						}
-						else if(Integer.parseInt(br.readLine())==3)
+						else if(choice==3)
 						{
 							System.out.println("Thanks For Using Application");
 							System.exit(0);
 						}
 					}
+					
+					
 				}
 				
-				if(isLogged)
-				{
-					System.out.println("Welcome To Home");
-				}
+	
 				
 				
 				
-				break;
 			case 3:							//exit
 				System.out.println("Thanks For Using Application");
 				System.exit(0);
 				break;
 			
 		}
+		
+
+		System.out.println("Exit");
+		
 	}
 	
-	public static void addDetails() throws Exception
+	public static int addDetails() throws Exception
 	{
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -89,21 +100,13 @@ public class Start
 		String pass = br.readLine();
 	
 		UserInfo uf = new UserInfo(name,mobNo, userName, pass);
-
-		boolean res = UserDBController.insertUserRegData(uf);
-		if(res)
-		{
-			System.out.println("Added successfully.");
-		}
-		else 
-		{
-			System.out.println("Something went wrong.. got errors");
-			
-		}
+		int userNum  = UserDBController.insertUserRegData(uf);
+		
+		return userNum;
 	}
 	
 	
-	public static boolean checkIsLoggedIn() throws IOException, SQLException 
+	public static int checkIsLoggedIn() throws IOException, SQLException 
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -119,19 +122,15 @@ public class Start
 			if(uName.contentEquals(rs.getString(4)) && passWord.contentEquals(rs.getString(5)))
 			{
 				System.out.println("Login Successful");
-				
-				return true;
+				int userNum = Integer.parseInt(rs.getString(1));
+				return userNum;
 			}
 		}
 		
-		return false;
+		return -1;
 	}
 
-	
-	public void purchaseProduct()
-	{
-		
-	}
+
 }
 	
 
@@ -151,6 +150,7 @@ public class Start
 
 //'17', 'Rahul Pawar', '9146', 'pawarrahul', '9146'
 
+//'16', 'binod', '2222', 'nayak', 'sdqa'
 
 
 //if (isRegistered) 

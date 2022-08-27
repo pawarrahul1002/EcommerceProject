@@ -25,6 +25,16 @@ public class UserInfo {
 		this.pass = pass;
 	}
 
+	
+	public UserInfo(int userNo, String name, String mobNo,String userName ) {
+		super();
+		this.userNo = userNo;
+		this.name = name;
+		this.mobNo = mobNo;
+		this.userName = userName;
+		this.pass = "-1";
+	}
+	
 	public UserInfo() {
 		System.out.println("userinfo");
 	}
