@@ -3,6 +3,7 @@ package com.jdbcDemo.secondDemo.UserRegistration;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.jdbcDemo.firstDemo.ConnectStudentDatabase;
@@ -54,7 +55,7 @@ public class UserDBController {
 		return -1;
 	}
 	
-	public static ResultSet getAllUserData()
+	public static ResultSet getAllUserRegData()
 	{
 		ResultSet rs = null;
 		try {
@@ -75,6 +76,21 @@ public class UserDBController {
 		}
 		return rs;
 	}
+	
+	public static void printAllRegisteredUserData() throws SQLException 
+	{
+		ResultSet rs = UserDBController.getAllUserRegData();
+		while (rs.next()) 
+		{
+			printUserData(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4));
+		}
+	}
+	
+	public static void printUserData(int userNo,String name,int mobNo,String userName) 
+	{
+		System.out.println("[userNo=" + userNo + ", name=" + name + ", mobNo=" + mobNo + ", userName=" + userName+"]");
+	}
+
 	
 //	public static int getUserNum(String userName, String password)
 //	{

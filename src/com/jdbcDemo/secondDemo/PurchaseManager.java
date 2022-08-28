@@ -7,6 +7,7 @@ import com.jdbcDemo.secondDemo.UserRegistration.UserDBController;
 import com.jdbcDemo.secondDemo.UserRegistration.UserInfo;
 import com.jdbcDemo.secondDemo.ProductsManager.ProductDBController;
 import com.jdbcDemo.secondDemo.UserCartManager.UserCartController;
+import com.jdbcDemo.secondDemo.UserHistoryManager.AllUserHistoryController;
 
 public class PurchaseManager {
 
@@ -40,47 +41,7 @@ public class PurchaseManager {
 			case 1:
 				// view all
 				ProductDBController.showAllProduct();
-//				System.out.println("\n"
-//						+ "Enter"
-//						+ "\n1 Add TO Cart"
-//						+ "\n2 Sort Products"
-//						+ "\n3 Goto Cart");
-//				
-//				int c= Integer.parseInt(br.readLine());
-//				switch(c)
-//				{
-//				case 1:
-//					char yOrN;
-//					do
-//					{
-//						System.out.println("Enter Product Id : ");
-//						int id = Integer.parseInt(br.readLine());
-//						
-//						System.out.println("Enter Quantity : ");
-//						int qty = Integer.parseInt(br.readLine());
-//						
-//						cart.put(id,qty);
-//						
-//						
-//						System.out.println("Added To Cart (--/) \nWant To Add More (Y/N)");
-//						yOrN = (char)br.read();
-//						br.skip(2);
-//					}while(yOrN == 'y' || yOrN == 'Y');
-//					
-//					
-//					System.out.println("Enter Choice \n1 View Cart \n2 Total Amount");
-//					System.out.println("3 CheckOut");
-//
-//					int n = Integer.parseInt(br.readLine());
-//					if(n==1)
-//					{
-//						UserCartController.viewCart(cart,false);
-//					}
-//					else if(n==2)
-//					{
-//						UserCartController.viewCart(cart,true);		//pass true if wanna view price only
-//					}
-//				}
+
 				break;
 			case 2:
 				// sort by
@@ -116,24 +77,38 @@ public class PurchaseManager {
 
 					cart.put(id, qty);
 
-					System.out.println("Added To Cart (--/) \nWant To Add More (Y/N)");
+					System.out.println("Added To Cart (-\\^//-) \nWant To Add More (Y/N)");
 					yOrN = (char) br.read();
 					br.skip(2);
 				} while (yOrN == 'y' || yOrN == 'Y');
 
 				break;
 			case 4:
+
+				System.out.println("Cart Contains-->");
 				UserCartController.viewCart(cart, false);
+				System.out.println();
 
 				break;
 			case 5:
 				UserCartController.viewCart(cart, true);
+				System.out.println();
 
 				break;
 			case 6:
 				// checkout
-				checkout(cart);
-				cart.clear();
+
+				UserCartController.viewCart(cart, true);
+				if(!cart.isEmpty())
+				{
+					checkout(cart,uf);
+					cart.clear();
+					
+				}
+				else
+				{
+					System.out.println("Add Items In Your Cart");
+				}
 				break;
 			case 7:
 				choice = 7;
@@ -145,11 +120,14 @@ public class PurchaseManager {
 
 	}
 
-	public static void checkout(HashMap<Integer, Integer> cart) throws Exception {
+	public static void checkout(HashMap<Integer, Integer> cart, UserInfo uf) throws Exception {
 		System.out.println("Items Are Delivered Shortly To Your Address\n");
+		
+		AllUserHistoryController.insertToUserHistory(cart, uf);
 		ProductDBController.updateSelectedProductQty(cart);
 		System.out.println("Updated Products Quantities Are-->\n");
 		ProductDBController.showAllProduct();
 
 	}
 }
+

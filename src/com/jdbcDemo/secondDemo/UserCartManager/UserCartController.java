@@ -26,14 +26,30 @@ public class UserCartController {
 			int pID = rs.getInt(1);
 
 			int price = rs.getInt(5);
+			String pName = rs.getString(2);
+			String pDesc = rs.getString(3);
 
-			totalPrice += price*cart.get(pID);
+			int avaQuant = rs.getInt(4);
+//			int avaQuant = Integer.parseInt(rs.getString(3));
 			
-			if (!needPriceOnly) {
-				
-				String pName = rs.getString(2);
-				String pDesc = rs.getString(3);
-				
+			if (avaQuant >= cart.get(pID)) 
+			{
+				totalPrice += price * cart.get(pID);
+			}else
+			{
+				if(avaQuant==0)
+				{
+					System.out.println(pName + " Is Out Of Stock..");
+					cart.remove(pID);
+				}else
+				{
+					System.out.println(pName + " Is Out Of Stock.. Only "+avaQuant+" Quantities Avaialble.");
+					totalPrice += price * avaQuant;
+					cart.replace(pID, avaQuant);
+				}
+			}
+			
+			if (!needPriceOnly && (avaQuant!=0) ) {
 				System.out.println("ID = "  + pID + ", Prod Name = " 
 											+ pName + ", Prod Desc = " 
 											+ pDesc + ", Quantity = "

@@ -12,7 +12,7 @@ public class UserDBConnection {
 		try {
 			//load the  driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			System.out.println("Driver loaded");
+//			System.out.println("Driver loaded");
 			
 			//Create the connection
 			String user = "root";
